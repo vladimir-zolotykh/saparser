@@ -42,6 +42,7 @@ class Parser:
             self._expect(RPAREN)
         else:
             res = N.Num(self.token)
+        self._advance()
         return res
 
     def _advance(self) -> T.Token:
