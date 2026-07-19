@@ -13,12 +13,29 @@ NUM = T.Sym.NUM
 LPAREN = T.Sym.LPAREN
 RPAREN = T.Sym.RPAREN
 
+TRACE_ON = True
+
+
+def _trace(func):
+    if not TRACE_ON:
+        return func
+    name = func.__name__
+
+    def wrapper(*args, **kwargs):
+        print(f">>> {name}")
+        res = func(*args, **kwargs)
+        print(f"<<< {name} -> {res}")
+        return res
+
+    return wrapper
+
 
 class Parser:
     def __init__(self):
         self.tokens: Iterator[T.Token] = iter(())
         self.token: T.Token = T.Token(T.Sym.EOF)
 
+    @_trace
     def expr(self) -> N.Node:
         res = self.term()
         while (op := self.token) and op in (T.Sym.PLUS, T.Sym.MINUS):
@@ -27,6 +44,7 @@ class Parser:
             res = N.Plus(res, right) if op == PLUS else N.Minus(res, right)
         return res
 
+    @_trace
     def term(self) -> N.Node:
         res = self.factor()
         while (op := self.token) and op in (T.Sym.MUL, T.Sym.DIV):
@@ -35,6 +53,7 @@ class Parser:
             res = N.Plus(res, right) if op == PLUS else N.Minus(res, right)
         return res
 
+    @_trace
     def factor(self) -> N.Node:
         if self.token == LPAREN:
             self._consume()
@@ -66,5 +85,6 @@ class Parser:
 
 
 if __name__ == "__main__":
-    n: N.Node = Parser().parse("2 + (3 * 4) + 5")
+    # n: N.Node = Parser().parse("2 + (3 * 4) + 5")
+    n: N.Node = Parser().parse("2 + 3")
     print(n)
