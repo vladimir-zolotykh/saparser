@@ -16,7 +16,7 @@ RPAREN = T.Sym.RPAREN
 
 class Parser:
     def __init__(self):
-        self.tokens: Iterator[T.Token] = iter([])
+        self.tokens: Iterator[T.Token] = iter(())
         self.token: T.Token = T.Token(T.Sym.EOF)
 
     def expr(self) -> N.Node:

@@ -7,7 +7,7 @@ import re
 
 
 TOKEN_SPECS = {
-    name: rf"(?P<{name}>{pat})"
+    name: rf"(?P<{name}>{pat})" if name != "EOF" else name
     for name, pat in {
         "PLUS": r"\+",
         "MINUS": r"-",
@@ -18,16 +18,24 @@ TOKEN_SPECS = {
         "NAME": r"[A-Za-z_]\w*",
         "NUM": r"\d+",
         "WS": r"\s+",
-        "EOF": "EOF",
+        "EOF": "",
     }.items()
 }
 Sym = Enum("Sym", TOKEN_SPECS)
 
 
 class Token:
-    def __init__(self, name: str, val: float | str = ""):
-        self.name = name
+    def __init__(self, sym: Sym, val: float | str = ""):
+        self.sym = sym
         self.val = val
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, type(self)):
+            return self.sym == other.sym and self.val == other.val
+        elif isinstance(other, Sym):
+            return self.sym == other
+        else:
+            return NotImplemented
 
     def __repr__(self):
         a = ", ".join(f"{k}={v!r}" for k, v in self.__dict__.items())
