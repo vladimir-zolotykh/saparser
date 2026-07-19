@@ -18,13 +18,14 @@ TOKEN_SPECS = {
         "NAME": r"[A-Za-z_]\w*",
         "NUM": r"\d+",
         "WS": r"\s+",
+        "EOF": "EOF",
     }.items()
 }
 Sym = Enum("Sym", TOKEN_SPECS)
 
 
 class Token:
-    def __init__(self, name: str, val: float | str):
+    def __init__(self, name: str, val: float | str = ""):
         self.name = name
         self.val = val
 

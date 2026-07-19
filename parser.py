@@ -16,7 +16,7 @@ RPAREN = T.Sym.RPAREN
 
 class Parser:
     def __init__(self):
-        self.tokens: Iterator[T.Token] = iter()
+        self.tokens: Iterator[T.Token] = iter([])
         self.token: T.Token = T.Token(T.Sym.EOF)
 
     def expr(self) -> N.Node:
@@ -58,12 +58,12 @@ class Parser:
     def _consume(self) -> None:
         self.token = next(self.tokens)
 
-    def parse(self, sexpr: str) -> T.Node:
+    def parse(self, sexpr: str) -> N.Node:
         self.tokens = T.iter_tokes(sexpr)
         self._advance()
         return self.expr()
 
 
 if __name__ == "__main__":
-    n: T.Node = Parser().parse("2 + (3 * 4) + 5")
+    n: N.Node = Parser().parse("2 + (3 * 4) + 5")
     print(n)
