@@ -20,6 +20,9 @@ class BinOp(Node):
         self.left = left
         self.right = right
 
+    def __repr__(self):
+        return f"{type(self).__name__}({self.left}, {self.right})"
+
 
 class Plus(BinOp):
     _op = T.Sym.PLUS
