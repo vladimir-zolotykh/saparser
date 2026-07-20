@@ -13,12 +13,30 @@ NUM = T.Sym.NUM
 LPAREN = T.Sym.LPAREN
 RPAREN = T.Sym.RPAREN
 
+TRACE_ON = True
+
+
+def _trace(func):
+    if not TRACE_ON:
+        return func
+    name = func.__name__
+
+    def wrapper(*args, **kwargs):
+        self = args[0]
+        print(f"<_trace> {name} {self.token = }")
+        res = func(*args, **kwargs)
+        print(f"<_trace> {name} -> {res}")
+        return res
+
+    return wrapper
+
 
 class Parser:
     def __init__(self):
         self.tokens: Iterator[T.Token] = iter(())
         self.token: T.Token | None = None
 
+    @_trace
     def expr(self) -> N.Node:
         res = self.term()
         while (op := self.token) and op in (T.Sym.PLUS, T.Sym.MINUS):
@@ -27,6 +45,7 @@ class Parser:
             res = N.Plus(res, right) if op == PLUS else N.Minus(res, right)
         return res
 
+    @_trace
     def term(self) -> N.Node:
         res = self.factor()
         while (op := self.token) and op in (T.Sym.MUL, T.Sym.DIV):
@@ -35,6 +54,7 @@ class Parser:
             res = N.Plus(res, right) if op == PLUS else N.Minus(res, right)
         return res
 
+    @_trace
     def factor(self) -> N.Node:
         if self.token == LPAREN:
             self._consume()
@@ -47,7 +67,7 @@ class Parser:
 
     def _next(self, iter) -> T.Token | None:
         tok = next(self.tokens)
-        print(f"\033[31m{tok = }\033[0m")
+        print(f"<_next> {tok = }")
         return tok
 
     def _advance(self) -> T.Token:
