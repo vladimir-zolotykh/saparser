@@ -7,7 +7,7 @@ import re
 
 
 TOKEN_SPECS = {
-    name: rf"(?P<{name}>{pat})" if name != "EOF" else name
+    name: rf"(?P<{name}>{pat})"
     for name, pat in {
         "PLUS": r"\+",
         "MINUS": r"-",
@@ -18,7 +18,6 @@ TOKEN_SPECS = {
         "NAME": r"[A-Za-z_]\w*",
         "NUM": r"\d+",
         "WS": r"\s+",
-        "EOF": "",
     }.items()
 }
 Sym = Enum("Sym", TOKEN_SPECS)
