@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
+from validatedinitmeta import ValidatedInitMeta
 import tokens as T
 
 
-class Node:
-    def __init__(self, val: float | str):
-        # assert isinstance(val, (float, str))
+class Node(metaclass=ValidatedInitMeta):
+    _DO_INIT = True
+
+    def __init__(self, val: float | T.Sym | str = ""):
         self.val = val
 
 
 class Num(Node):
     def __repr__(self):
-        # return f"{type(self).__name__}({self.val!r})"
         return f"Num({self.val})"
 
 

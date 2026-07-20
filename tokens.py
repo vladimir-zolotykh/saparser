@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
-from typing import Iterator, Any, get_args, get_origin, get_type_hints, Union
+from typing import Iterator
 from enum import Enum
-import inspect
 import re
-
+from validatedinitmeta import ValidatedInitMeta
 
 TOKEN_SPECS = {
     name: rf"(?P<{name}>{pat})"
@@ -24,44 +23,9 @@ TOKEN_SPECS = {
 Sym = Enum("Sym", TOKEN_SPECS)
 
 
-def check_type(value: Any, hint: Any) -> bool:
-    origin = get_origin(hint)
-    if origin is Union:
-        return any(check_type(value, h) for h in get_args(hint))
-    if hint is Any:
-        return True
-    return isinstance(value, hint)
+class Token(metaclass=ValidatedInitMeta):
+    _DO_INIT = True
 
-
-class TypedMeta(type):
-    def __new__(mcls, clsname, bases, clsdict):
-        super_init = clsdict["__init__"]
-
-        sig = inspect.signature(super_init)
-        hints = get_type_hints(super_init)
-
-        def new_init(*args, **kwargs):
-            bound = sig.bind(*args, **kwargs)
-            bound.apply_defaults()
-
-            for name, value in bound.arguments.items():
-                if name not in hints:
-                    continue
-
-                hint = hints[name]
-                assert check_type(value, hint), (
-                    f"{name}={value!r} "
-                    f"is {type(value).__name__}, "
-                    f"expected {hint!r}"
-                )
-
-            return super_init(*args, **kwargs)
-
-        clsdict["__init__"] = new_init
-        return super().__new__(mcls, clsname, bases, clsdict)
-
-
-class Token(metaclass=TypedMeta):
     def __init__(self, sym: Sym, val: float | str = ""):
         self.sym = sym
         self.val = val
