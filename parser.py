@@ -48,10 +48,16 @@ class Parser:
         self.tokens: Iterator[T.Token] = iter(())
         self.token: T.Token | None = None
 
+    def _one_of(self, *sym) -> T.Token | None:
+        if self.token in sym:
+            return self.token
+        return None
+
     @color(RED)
     def expr(self) -> N.Node:
         res = self.term()
-        while (op := self.token) and op in (T.Sym.PLUS, T.Sym.MINUS):
+        # while (op := self.token) and op in (T.Sym.PLUS, T.Sym.MINUS):
+        while op := self._one_of(T.Sym.PLUS, T.Sym.MINUS):
             self._consume()
             right = self.term()
             res = N.Plus(res, right) if op == PLUS else N.Minus(res, right)
@@ -80,7 +86,6 @@ class Parser:
     @color(GREEN)
     def _next(self, iter) -> T.Token | None:
         tok = next(self.tokens)
-        # print(f"<_next> {tok = }")
         return tok
 
     def _advance(self) -> T.Token:

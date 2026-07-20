@@ -32,7 +32,8 @@ class Token:
         if isinstance(other, type(self)):
             return self.sym == other.sym and self.val == other.val
         elif isinstance(other, Sym):
-            return self.sym == other
+            print(type(self.sym), type(other))
+            return self.sym.name == other.name
         else:
             return NotImplemented
 
@@ -46,7 +47,7 @@ def iter_tokes(sexpr: str) -> Iterator[Token]:
     for m in re.finditer(master_pat, sexpr):
         if m.lastgroup == Sym.WS.name:
             continue
-        yield Token(m.lastgroup, val=m.group(0))
+        yield Token(Sym[m.lastgroup], val=m.group(0))
 
 
 if __name__ == "__main__":
