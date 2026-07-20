@@ -45,9 +45,14 @@ class Parser:
         self._advance()
         return res
 
+    def _next(self, iter) -> T.Token | None:
+        tok = next(self.tokens)
+        print(f"\033[31m{tok = }\033[0m")
+        return tok
+
     def _advance(self) -> T.Token:
         try:
-            self.token = next(self.tokens)
+            self.token = self._next(self.tokens)
         except StopIteration:
             self.token = None
         return self.token
@@ -57,7 +62,7 @@ class Parser:
             raise SyntaxError(f"Got {self.token}, expected = {expected}")
 
     def _consume(self) -> None:
-        self.token = next(self.tokens)
+        self.token = self._next(self.tokens)
 
     def parse(self, sexpr: str) -> N.Node:
         self.tokens = T.iter_tokes(sexpr)
