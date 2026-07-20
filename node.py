@@ -5,13 +5,15 @@ import tokens as T
 
 
 class Node:
-    def __init__(self, val: float | T.Sym):
+    def __init__(self, val: float | str):
+        # assert isinstance(val, (float, str))
         self.val = val
 
 
 class Num(Node):
     def __repr__(self):
-        return f"{type(self).__name__}({self.val!r})"
+        # return f"{type(self).__name__}({self.val!r})"
+        return f"Num({self.val})"
 
 
 class BinOp(Node):

@@ -56,8 +56,8 @@ class Parser:
     @color(RED)
     def expr(self) -> N.Node:
         res = self.term()
-        # while (op := self.token) and op in (T.Sym.PLUS, T.Sym.MINUS):
-        while op := self._one_of(T.Sym.PLUS, T.Sym.MINUS):
+        # while op := self._one_of(T.Sym.PLUS, T.Sym.MINUS):
+        while (op := self.token) and op in (T.Sym.PLUS, T.Sym.MINUS):
             self._consume()
             right = self.term()
             res = N.Plus(res, right) if op == PLUS else N.Minus(res, right)
@@ -79,7 +79,7 @@ class Parser:
             res = self.expr()
             self._expect(RPAREN)
         else:
-            res = N.Num(self.token)
+            res = N.Num(self.token.val)
         self._advance()
         return res
 
