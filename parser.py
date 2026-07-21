@@ -79,7 +79,7 @@ class Parser:
             res = self.expr()
             self._expect(RPAREN)
         else:
-            res = N.Num(self.token.val)
+            res = N.Num(float(self.token.val))
         self._advance()
         return res
 

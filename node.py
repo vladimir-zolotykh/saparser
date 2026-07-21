@@ -12,6 +12,10 @@ class Node:
 
 
 class Num(Node):
+    @validate_init
+    def __init__(self, val: float):
+        self.val = val
+
     def __repr__(self):
         return f"Num({self.val})"
 

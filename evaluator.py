@@ -60,7 +60,7 @@ class MultiMeta(type):
 
 class Evaluator(metaclass=MultiMeta):
     def eval(self, n: Num) -> float:
-        return n.val
+        return float(n.val)
 
     def eval(self, n: Plus) -> float:  # noqa: F811
         return self.eval(n.left) + self.eval(n.right)
@@ -77,6 +77,6 @@ class Evaluator(metaclass=MultiMeta):
 
 if __name__ == "__main__":
     # n: Node = Parser().parse("2 + (3 * 4) + 5")
-    n: Node = Parser().parse("2 + 1")
+    n: Node = Parser().parse("2 + 3")
     print(n)
     print(Evaluator().eval(n))
