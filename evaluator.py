@@ -76,7 +76,7 @@ class Evaluator(metaclass=MultiMeta):
 
 
 if __name__ == "__main__":
-    # n: Node = Parser().parse("2 + (3 * 4) + 5")
-    n: Node = Parser().parse("2 + 3")
+    # n: Node = Parser().parse("2 * 3")
+    n: Node = Parser().parse("2 + (3 * 4) + 5")
     print(n)
     print(Evaluator().eval(n))
