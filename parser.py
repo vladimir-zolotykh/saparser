@@ -19,7 +19,7 @@ YELLOW = "\033[33m"
 BLUE = "\033[34m"
 
 
-TRACE_ON = True
+TRACE_ON = False
 
 
 def color(color):

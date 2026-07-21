@@ -34,9 +34,9 @@ class Minus(BinOp):
     _op = T.Sym.MINUS
 
 
-class MUL(BinOp):
+class Mul(BinOp):
     _op = T.Sym.MINUS
 
 
-class DIV(BinOp):
+class Div(BinOp):
     _op = T.Sym.MINUS
