@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
-from validatedinitmeta import ValidatedInitMeta
+from validate_init import validate_init
 import tokens as T
 
 
-class Node(metaclass=ValidatedInitMeta):
-    _DO_INIT = True
-
+class Node:
+    @validate_init
     def __init__(self, val: float | T.Sym | str = ""):
         self.val = val
 

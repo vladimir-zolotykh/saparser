@@ -4,7 +4,7 @@
 from typing import Iterator
 from enum import Enum
 import re
-from validatedinitmeta import ValidatedInitMeta
+from validate_init import validate_init
 
 TOKEN_SPECS = {
     name: rf"(?P<{name}>{pat})"
@@ -23,9 +23,8 @@ TOKEN_SPECS = {
 Sym = Enum("Sym", TOKEN_SPECS)
 
 
-class Token(metaclass=ValidatedInitMeta):
-    _DO_INIT = True
-
+class Token:
+    @validate_init
     def __init__(self, sym: Sym, val: float | str = ""):
         self.sym = sym
         self.val = val
