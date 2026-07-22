@@ -34,10 +34,8 @@ class Dict(dict):
     def __setitem__(self, key, val):
         if key[:2] == "__" and key[-2:] == "__":
             super().__setitem__(key, val)
-            return
-        mm = self.get(key, Method())
-        mm.register(val)
-        super().__setitem__(key, mm)
+        else:
+            self.setdefault(key, Method()).register(val)
 
 
 class MultiMeta(type):
