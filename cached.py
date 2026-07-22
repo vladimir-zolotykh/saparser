@@ -43,20 +43,20 @@ class CacheMeta(type):
         key = (args, tuple(sorted(kwargs.items())))
         if (cls not in mcls._cache) or (key not in mcls._cache[cls]):
             mcls._cache[cls][key] = super().__call__(*args, **kwargs)
-        return mcls[cls][key]
+        return mcls._cache[cls][key]
 
 
-class Logger(SingletonMeta):
+class Logger(metaclass=SingletonMeta):
     def __init__(self):
         print("Initializing Logger")
 
 
-class Module(SingletonMeta):
+class Module(metaclass=SingletonMeta):
     def __init__(self):
         print("Initializing Module")
 
 
-class Person(CacheMeta):
+class Person(metaclass=CacheMeta):
     @validate_init
     def __init__(self, name, age, salary):
         print(f"Initializing {name}")

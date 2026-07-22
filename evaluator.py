@@ -32,17 +32,12 @@ class Method:
 
 class Dict(dict):
     def __setitem__(self, key, val):
-        if (key[:2] == "__" and key[-2:] == "__") or (key not in self):
+        if key[:2] == "__" and key[-2:] == "__":
             super().__setitem__(key, val)
             return
-        else:
-            oval = self[key]
-            if isinstance(oval, Method):
-                mm = oval
-                mm.register(val)
-            else:
-                mm = Method(oval, val)
-            super().__setitem__(key, mm)
+        mm = self.get(key, Method())
+        mm.register(val)
+        super().__setitem__(key, mm)
 
 
 class MultiMeta(type):
