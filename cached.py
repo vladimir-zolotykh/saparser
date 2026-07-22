@@ -36,7 +36,7 @@ class SingletonMeta(type):
 
 
 class CacheMeta(type):
-    _cache = defaultdict(defaultdict())
+    _cache = defaultdict(defaultdict)
 
     def __call__(cls, *args, **kwargs):
         mcls = type(cls)
@@ -59,6 +59,7 @@ class Module(SingletonMeta):
 class Person(CacheMeta):
     @validate_init
     def __init__(self, name, age, salary):
+        print(f"Initializing {name}")
         self.name = name
         self.age = age
         self.salary = salary
@@ -75,6 +76,7 @@ if __name__ == "__main__":
     m2 = Module()
     assert m1 is m2
     bob = Person("Bob", 37, 12000.0)
+    print(bob)
     max = Person("Max", 42, 24000.50)
     bob = Person("Bob", 37, 12000.0)
     bob = Person("Bob", 38, 12000.0)
