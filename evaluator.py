@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
 from types import MethodType
-from inspect import signature, _empty
+from inspect import signature
 from node import Node, Num, Plus, Minus, Mul, Div
 from parser import Parser
 
