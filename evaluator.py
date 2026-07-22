@@ -8,8 +8,9 @@ from parser import Parser
 
 
 class Method:
-    def __init__(self, name):
+    def __init__(self, *func):
         self.methods = {}
+        self.register(*func)
 
     def __get__(self, instance, owner=None):
         if instance is None:
@@ -40,8 +41,7 @@ class Dict(dict):
                 mm = oval
                 mm.register(val)
             else:
-                mm = Method(key)
-                mm.register(oval, val)
+                mm = Method(oval, val)
             super().__setitem__(key, mm)
 
 
