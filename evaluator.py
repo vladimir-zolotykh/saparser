@@ -9,7 +9,6 @@ from parser import Parser
 
 class Method:
     def __init__(self, name):
-        self._name = name
         self.methods = {}
 
     def __get__(self, instance, owner=None):
@@ -17,16 +16,13 @@ class Method:
             return self
         return MethodType(self, instance)
 
-    def register(self, func):
-        sig = signature(func)
-        typ = tuple()
-        for name, parm in sig.parameters.items():
-            if name == "self":
-                continue
-            if parm.annotation is _empty:
-                raise TypeError(f"{name}: all params must be annotated")
-            typ = typ + (parm.annotation,)
-        self.methods[typ] = func
+    def register(self, *func):
+        def _register(func):
+            typ = tuple(p.annotation for p in signature(func).parameters.values())[1:]
+            self.methods[typ] = func
+
+        for f in func:
+            _register(f)
 
     def __call__(self, *args, **kwargs):
         typ = tuple(type(a) for a in args[1:])
@@ -35,11 +31,9 @@ class Method:
 
 class Dict(dict):
     def __setitem__(self, key, val):
-        if key[:2] == "__" and key[-2:] == "__":
+        if (key[:2] == "__" and key[-2:] == "__") or (key not in self):
             super().__setitem__(key, val)
             return
-        if key not in self:
-            super().__setitem__(key, val)
         else:
             oval = self[key]
             if isinstance(oval, Method):
@@ -47,8 +41,7 @@ class Dict(dict):
                 mm.register(val)
             else:
                 mm = Method(key)
-                mm.register(oval)
-                mm.register(val)
+                mm.register(oval, val)
             super().__setitem__(key, mm)
 
 
